@@ -1,34 +1,55 @@
-const { app, Tray, Menu, BrowserWindow } = require('electron/main')
+const { app, Tray, Menu, BrowserWindow, ipcMain } = require('electron/main')
 const path = require('node:path')
+const Store = require('electron-store')
 
-
-let tray
+Store.initRenderer();
+const store = new Store();
+store.store = {
+    voice_video: {
+        voiceVolume: 50,
+        videoQuality: "720p",
+    },
+}
 
 function createWindow() {
-    const win = new BrowserWindow({
+    const mainWindow = new BrowserWindow({
         width: 1000,
         height: 600,
         webPreferences: {
-            preload: path.join(__dirname, 'src/preload.js')
+            nodeIntegration: true,
+            preload: path.join(__dirname, 'preload.js'),
         },
+        titleBarStyle: 'hidden',
     })
-    win.loadFile('static/html/index.html')
-}
+    mainWindow.loadFile('static/html/main.html')
 
-app.whenReady().then(() => {
-    tray = new Tray('assets/images/icons/logo/duckordinal.png')
+    const tray = new Tray('assets/images/icons/logo/duckordinal.png')
 
     const trayMenu = Menu.buildFromTemplate([
+        { label: 'Settings', click() { mainWindow.webContents.send('open-settings') } },
         { type: 'separator' },
         { label: 'Quit', click() { app.quit(); } }
     ])
+
+    tray.setToolTip('DuckOrdinal')
+    tray.setContextMenu(trayMenu)
 
     if (process.platform === 'win32') {
         tray.on('click', tray.popUpContextMenu);
     }
 
-    tray.setToolTip('DuckOrdinal')
-    tray.setContextMenu(trayMenu)
+    ipcMain.on('get-settings', (event, args) => {
+        console.log('get-settings', store.get(args.key))
+        event.reply('settings-reply', store.get(args.key));
+    });
+    ipcMain.on('save-settings', (event, args) => {
+        store.set(args.key, args.data)
+        console.log('save-settings', store.get(args.key))
+    });
 
-    createWindow()
+    mainWindow.webContents.openDevTools()
+}
+
+app.whenReady().then(() => {
+    createWindow();
 })

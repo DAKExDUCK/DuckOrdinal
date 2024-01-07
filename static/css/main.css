@@ -1,0 +1,57 @@
+* {
+    font-family: 'gg sans', sans-serif;
+    font-family: 'gg sans Normal', sans-serif;
+    font-family: 'gg sans Medium', sans-serif;
+    font-family: 'gg sans SemiBold', sans-serif;
+}
+
+:root {
+    --main-bg-color: #2f3241;
+    --main-text-color: #74b1be;
+}
+
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.title-bar {
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.title-bar .drag-region {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+    height: 100%;
+    -webkit-app-region: drag;
+}
+
+.title-bar .drag-region .icon-logo {
+}
+
+.title-bar .drag-region .title {
+    margin: 0 0 0 10px;
+}
+
+.title-bar .controls {
+    display: flex;
+}
+
+.title-bar .controls button {
+    background: var(--main-bg-color);
+    border: none;
+    color: var(--main-text-color);
+    padding: 5px;
+    cursor: pointer;
+}
+
+.content {
+    padding: 10px;
+}
