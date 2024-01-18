@@ -3,13 +3,17 @@ const path = require('node:path')
 const Store = require('electron-store')
 
 Store.initRenderer();
-const store = new Store();
-store.store = {
-    voice_video: {
-        voiceVolume: 50,
-        videoQuality: "720p",
-    },
+const settings = new Store(name='settings', fileExtension='json', clearInvalidConfig=true);
+if (settings.size === 0) {
+    settings.store = {
+        voice_video: {
+            voiceVolume: 50,
+            videoQuality: "720p",
+        },
+    }
 }
+console.log(settings.path)
+console.log(settings.store)
 
 function createWindow() {
     const mainWindow = new BrowserWindow({
@@ -39,12 +43,12 @@ function createWindow() {
     }
 
     ipcMain.on('get-settings', (event, args) => {
-        console.log('get-settings', store.get(args.key))
-        event.reply('settings-reply', store.get(args.key));
+        console.log('get-settings', settings.get(args.key))
+        event.reply('get-settings', settings.get(args.key));
     });
     ipcMain.on('save-settings', (event, args) => {
-        store.set(args.key, args.data)
-        console.log('save-settings', store.get(args.key))
+        settings.set(args.key, args.data)
+        console.log('save-settings', settings.get(args.key))
     });
 
     mainWindow.webContents.openDevTools()
