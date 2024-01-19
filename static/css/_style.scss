@@ -1,0 +1,64 @@
+* {
+    font-family: 'gg sans', sans-serif;
+    &:not(:first-child) {
+      font-family: 'gg sans Normal', sans-serif;
+    }
+    &:nth-child(3) {
+      font-family: 'gg sans Medium', sans-serif;
+    }
+    &:nth-child(4) {
+      font-family: 'gg sans SemiBold', sans-serif;
+    }
+  }
+  
+  :root {
+    --main-bg-color: #2f3241;
+    --main-text-color: #74b1be;
+  }
+  
+  body {
+    margin: 0;
+    overflow: hidden;
+  }
+  
+  .title-bar {
+    background-color: var(--main-bg-color);
+    color: var(--main-text-color);
+    height: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  
+    .drag-region {
+      display: flex;
+      align-items: center;
+      flex-grow: 1;
+      height: 100%;
+      -webkit-app-region: drag;
+  
+      /* .icon-logo {
+      } */
+  
+      .title {
+        margin: 0 0 0 10px;
+      }
+    }
+  
+    .controls {
+      display: flex;
+  
+      button {
+        background: var(--main-bg-color);
+        border: none;
+        color: var(--main-text-color);
+        padding: 5px;
+        cursor: pointer;
+      }
+    }
+  }
+  
+  .content {
+    padding: 10px;
+  }
+  
